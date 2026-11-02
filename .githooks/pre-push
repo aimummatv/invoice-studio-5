@@ -1,2 +1,2 @@
 #!/bin/sh
-node scripts/check-publish-safety.mjs || exit 1
+node scripts/check-publish-safety.mjs --history || exit 1

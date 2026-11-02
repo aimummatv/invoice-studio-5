@@ -2,6 +2,8 @@
 
 Invoice Studio 5 business records and import documents belong outside the repository, under the private Documents workspace. Use synthetic data for tests, evidence and screenshots. Run `npm run check:privacy` before publication and enable the local guard with `git config core.hooksPath .githooks`. The private reference used for the check is never committed. Keep source and software-only release assets synchronized; never include local settings exports, business databases or rollback bundles in a release.
 
+After the 5.0.0 privacy history rewrite, use a fresh clone instead of merging unsanitized old branches. The local pre-push guard scans reachable history against the private reference as well as the working source.
+
 1. Clone the repository and run `npm ci` with Node 24 on Windows.
 2. Create a feature branch; keep the finalized release baseline separate from new work.
 3. Run `npm run typecheck`, `npm test` and `npm run build` before opening a pull request.
