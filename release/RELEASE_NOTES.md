@@ -1,4 +1,12 @@
-# Invoice Studio v4-12.3 — startup pipe hotfix
+# Invoice Studio 5.0.0 — private business setup and invoice text editing
+
+2 November 2026. Adds isolated local business storage, company/customer settings, favourites, editable printed captions, persistent defaults and FSSAI labelling. Owner setup confirms numbering; applicability review and required production IRN evidence gate customer-ready release. Google synchronization is disabled for the private business workspace.
+
+129 service tests, TypeScript, build, synthetic desktop/PDF checks and privacy checks cover this release. Existing TEST records, original PDFs and demo checkpoints are preserved. Windows downloads contain no real business data. The package is unsigned; physical printing and real government portal acceptance remain unverified.
+
+Older affected downloads have been withdrawn; use the v5.0.0 assets. Source history is sanitized as part of this release. Prior external copies cannot be recalled.
+
+## Invoice Studio v4-12.3 — startup pipe hotfix
 
 2 November 2026. Prevents a JavaScript main-process error when a desktop launcher closes an inherited output pipe while Node/Electron prints a warning. Handles asynchronous stdout/stderr `EPIPE` and synchronous console `EPIPE`; unrelated errors still propagate.
 

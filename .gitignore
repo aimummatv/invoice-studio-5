@@ -32,3 +32,8 @@ release/*-checklist.json
 Thumbs.db
 .vscode/
 .idea/
+Private/
+private-data/
+business-settings*.json
+partners-original.txt
+import-verification.json

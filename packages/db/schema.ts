@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION=7;
+export const SCHEMA_VERSION=8;
 export const SCHEMA=`
 CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL);
 CREATE TABLE profile(id TEXT PRIMARY KEY CHECK(id='business'), revision INTEGER NOT NULL, payload TEXT NOT NULL);

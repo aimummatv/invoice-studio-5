@@ -1,20 +1,13 @@
-# Current local package: v4-12.3 startup hotfix
+# Invoice Studio 5.0.0 — private business setup
 
-2 November 2026. Handles `EPIPE` from inherited stdout/stderr pipes, including Electron's synchronous console writes. Other output errors still propagate. No data/schema or invoice workflow changes.
+2 November 2026.
 
-Verified: TypeScript, production build, all 123 service tests (including three diagnostic-output regressions), and a packaged startup check with isolated data, disconnected output pipes, injected `EPIPE` stream errors and subsequent console/process warnings. The owner setup screen remained responsive. Run `node scripts/startup-pipe-check.mjs` with `STUDIO4_PACKAGED_EXE` pointing to the desired executable to repeat the packaged check.
+Implemented: immutable TEST/LIVE workspace identity, isolated private storage, local company/customer import with field-by-field read-back, customer favourites, editable printed captions and persistent defaults, FSSAI caption, portable settings JSON and local settings folder access. Private settings exclude credentials, workspace mode and numbering counters.
 
-The corrected unsigned Windows package was built locally with electron-builder's version override `4.12.3`. GitHub downloads remain v4-12.2 until a new release is uploaded. Physical printing and real government portal acceptance remain unverified.
+LIVE setup confirms numbering before issuance. Unknown applicability blocks real issuance; required IRN blocks customer export/open/print until matching production evidence is verified. LIVE synchronization is disabled. Existing TEST data and demo checkpoints stay separate. Historical templates and issued snapshots remain unchanged. New business documents use template v5-1.
 
-## Finalized release baseline: v4-12.2
+Validation: TypeScript and production build; 129 service tests including source-document mapping, migration, immutable workspace mode, applicability/IRN gates, settings conflicts, favourites, restart and LIVE backup restoration; synthetic desktop checks for Owner setup, exact customer fill, persistent captions and all seven PDF templates. PDF pages were rendered and visually inspected. The packaged app is checked using the same isolated desktop workflow and the detached-output startup regression.
 
-Implemented and packaged before GitHub publication. Validation recorded in the local release checklist:
+Publication requirements: privacy scan against the local reference, sanitized history and release assets, software-only Windows downloads. Real import verification and rollback copies remain private outside the repository. Historical external copies cannot be recalled.
 
-- 120 service tests, TypeScript and production build passed.
-- All seven document workflows passed packaged fill/edit/save/reopen/preview/export/Print PDF-handoff checks.
-- Main HSN uses the highest-taxable-value line; IRN generation date is included in demo summaries; official imports reject inconsistent main HSN and keep missing/invalid registration dates pending.
-- TEST/LIVE separation and guided portal tabs described in v4-13 remain planned, not implemented.
-- Original records/PDF hashes and the active demo checkpoint were preserved.
-- Physical printer output and a real portal submission were not exercised.
-
-Machine-specific reports and local business data are excluded from Git. Re-run CI/checks on future commits; the prior package's verification is not a claim about untested modifications.
+Limits: unsigned Windows package; physical printer output and real government portal acceptance are unverified. E-invoice/e-way applicability must be reviewed by the Owner; software validation is not confirmation of government registration. The guided government JSON workflow remains paused.

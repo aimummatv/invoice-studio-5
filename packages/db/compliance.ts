@@ -42,7 +42,7 @@ export function portalExport(s:Snapshot,kind:'IRP'|'EWAY'):{version:string;error
 
 export class Compliance {
  s:Store;keys:readonly SigningKey[];
- constructor(s:Store,keys:readonly SigningKey[]=IRP_KEYS){this.s=s;this.keys=keys;}
+ constructor(s:Store,keys:readonly SigningKey[]=IRP_KEYS){this.s=s;this.keys=s.mode==='LIVE'?keys.filter(key=>key.environment==='production'):keys;}
  document(token:string,id:string,permission:'read'|'tax'|'print'='read'){this.s.actor(token,permission);const d=this.s.document(id);if(!d||this.s.cancelled(id))throw Error('Choose an active issued invoice.');return d;}
  previewIrp(token:string,id:string,bytes:Buffer):ImportReview {
   const s=this.document(token,id,'tax').snapshot,p=object(bytes),errors:string[]=[];let qr:Obj|undefined,inv:Obj|undefined,key:SigningKey|undefined;

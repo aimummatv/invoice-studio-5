@@ -19,7 +19,7 @@ export class Reporting {
  readonly s:Store;
  constructor(store:Store){this.s=store;}
  private envelope(kind:string,filter:ReportFilter,body:Row) {
-  return {kind,filter,generatedAt:new Date().toISOString(),sourceVersion:'4.0.0-dev.5',mode:'TEST',...body,reportHash:hash({kind,filter,body})};
+  return {kind,filter,generatedAt:new Date().toISOString(),sourceVersion:'5.0.0',mode:this.s.mode,...body,reportHash:hash({kind,filter,body})};
  }
 
  collections(token:string,filter:ReportFilter={}) {

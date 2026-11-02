@@ -1,9 +1,9 @@
 # Invoice Studio 4 — Updated Master Implementation Plan
 
-**Version:** 4.0 implementation specification, revision 2  
-**Prepared:** 28 October 2026  
-**Business:** Example Brand  
-**Audience:** Claude Code / Codex / implementation engineers, business owner, GST chartered accountant  
+**Version:** 4.0 implementation specification, revision 2
+**Prepared:** 28 October 2026
+**Business:** Example Brand
+**Audience:** Claude Code / Codex / implementation engineers, business owner, GST chartered accountant
 **Status:** Build specification, subject to explicit business and CA sign-off at gates below
 
 > **Mission:** Deliver a reliable, offline-first Windows GST invoicing and business operations application for one issuing PC, with remote owner visibility through Google Sheets/Drive. Keep Invoice Studio v3 intact. Implement the original master plan **and** the twelve recommended improvements. Never trade accounting correctness, recoverability or security for visual polish.

@@ -1,6 +1,6 @@
 {
-  "name": "invoice-studio-4",
-  "version": "4.0.0-dev.8",
+  "name": "invoice-studio-5",
+  "version": "5.0.0",
   "private": true,
   "type": "module",
   "main": "dist/main/index.js",
@@ -20,7 +20,9 @@
     "test:desktop:billing": "node scripts/redesign-smoke.mjs",
     "test:desktop:pdf": "node scripts/v12-pdf-matrix.mjs",
     "test:desktop:preservation": "node scripts/v12-cleanup.mjs",
-    "test:desktop:recovery": "node scripts/v12-reliability.mjs"
+    "test:desktop:recovery": "node scripts/v12-reliability.mjs",
+    "check:privacy": "node scripts/check-publish-safety.mjs",
+    "test:desktop:business": "node scripts/business-v5-desktop.mjs"
   },
   "dependencies": {
     "@tesseract.js-data/eng": "1.0.0",
@@ -44,7 +46,7 @@
   },
   "build": {
     "appId": "in.ExampleBrand.invoicestudio4",
-    "productName": "Invoice Studio 4",
+    "productName": "Invoice Studio 5",
     "directories": {
       "output": "release/artifacts"
     },
@@ -67,7 +69,7 @@
       "runAfterFinish": false
     },
     "portable": {
-      "artifactName": "Invoice-Studio-4-${version}-Portable.${ext}"
+      "artifactName": "Invoice-Studio-${version}-Windows-x64-Portable.${ext}"
     },
     "asarUnpack": [
       "node_modules/tesseract.js/**",
@@ -75,7 +77,7 @@
       "node_modules/@tesseract.js-data/eng/**"
     ]
   },
-  "description": "Invoice Studio 4 \u2014 offline TEST source handover",
+  "description": "Offline invoicing with isolated private business and TEST workspaces",
   "author": "Example Brand",
   "license": "UNLICENSED"
 }

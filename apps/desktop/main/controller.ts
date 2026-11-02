@@ -15,7 +15,7 @@ export class Controller {
       const p=payload as Record<string,unknown>;
       const allowed:Record<string,string[]>={status:[],setup:['id','name','pin'],login:['id','pin'],logout:[],state:[],calculateDraft:['draft'],saveDraft:['draft'],issue:['draftId','expectedVersion','idempotencyKey','approvalId','reviewFingerprint','duplicateReason'],saveCustomer:['customer'],saveProduct:['product'],saveProfile:['profile'],recordPayment:['payment'],allocateAdvance:['paymentId','allocations','commandKey','effectiveDate','reason'],reversePayment:['paymentId','reason','pin'],purchase:['purchase'],register:['query'],document:['id'],backup:[],diagnostics:[],close:['date'],approveClose:['date','pin'],lockPeriod:['period','reason','pin'],cancel:['id','reason','pin'],addUser:['user','pin'],view:['name','filter'],operations:['action','input','pin']};
       const keys=allowed[command];if(!keys||Object.keys(p).some(k=>!keys.includes(k)))throw Error('Command or payload field is not allowlisted.');
-      if(command==='status')return {ok:true,data:{configured:this.store.security.hasUsers(),mode:'TEST',productionBlocked:true}};
+      if(command==='status')return {ok:true,data:{configured:this.store.security.hasUsers(),mode:this.store.mode,productionBlocked:this.store.mode==='TEST'}};
       if(command==='setup'){text(p.id,'User',100);text(p.name,'Name',100);text(p.pin,'PIN',12);this.store.setup({id:p.id,name:p.name,pin:p.pin});return {ok:true,data:true};}
       if(command==='login'){text(p.id,'User',100);text(p.pin,'PIN',12);this.token=this.store.login(p.id,p.pin);return {ok:true,data:this.store.state(this.token)};}
       if(command==='logout'){this.store.security.logout(this.token);this.token='';return {ok:true,data:true};}
