@@ -1,0 +1,34 @@
+# Dependencies and generated programs
+node_modules/
+dist/
+release/artifacts/
+*.exe
+*.msi
+*.zip
+*.asar
+# Local application records, recovery, credentials and environment
+.env*
+*.sqlite*
+*.db*
+*.is4b
+*.key
+*.pem
+*credentials*.json
+*credentials*.bin
+InvoiceStudio4Data/
+*.demo-sessions/
+draft-recovery/
+# Generated validation evidence and machine-specific reports
+qa/logs/
+qa/evidence/
+evidence/
+pc-results/
+release/*-checklist.json
+.npm-cache/
+*.log
+*.tap
+# Personal editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

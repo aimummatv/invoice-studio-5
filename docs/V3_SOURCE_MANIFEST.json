@@ -1,0 +1,376 @@
+{
+  "commit": "9d3537a8188ad03c7186ab721596d5a3a0e394ab",
+  "files": [
+    {
+      "path": ".gitignore",
+      "git_blob_sha": "4dce5ee60e546ed489086cf21d9efe96272f0341",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "84f8e493ca38e9bb72e62c0f7bc8f8fb77cea8818c0ea4faa722227abcde1ad9"
+    },
+    {
+      "path": "AUDIT.md",
+      "git_blob_sha": "c61a50dd5a8bd31eaf596a1efbb3d13ec4af024c",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "f0580e4ef5c06acaa3a8557e6d7864e8bc63c087fb371ceb6ba476918d66d296"
+    },
+    {
+      "path": "CHANGES.md",
+      "git_blob_sha": "96937c1de66865f924de9f15d4d39709184d6b4e",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "4b7967363b7432d00a6331ef34af4102d98fd898c9bc1f712f85a2607af81731"
+    },
+    {
+      "path": "INVOICE_STUDIO_IMPLEMENTATION_PLAN.md",
+      "git_blob_sha": "94497251ea4981464b3b9c178de96c6efa405a1c",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "7a9c071e983c7fcaa0a057096a1b51f62e46081d6ccbbda6497958c155ed7b2f"
+    },
+    {
+      "path": "LICENSES/Decimal.txt",
+      "git_blob_sha": "57740b9d4d86aedf5d518f2f363d5cf192c54127",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "3108b546bcff5d346923a82f48b2d252ca722f9088076db6d145f6b67757ad6c"
+    },
+    {
+      "path": "LICENSES/JetBrains-Mono.txt",
+      "git_blob_sha": "8f7ed671137e7a27c646ead86f45d5cb4875f459",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "403581b69dac5cff4079205e01c6b467e56af449ecbd7247693ddb1baafa005b"
+    },
+    {
+      "path": "LICENSES/Lucide.txt",
+      "git_blob_sha": "88290654d9be43fe537c5025e3006ea4b6edc94e",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "69179dfd334fc675e7ded5b3c3a0a2a6a26f8539ae517ea0e666c8206eb3704d"
+    },
+    {
+      "path": "LICENSES/Plus-Jakarta-Sans.txt",
+      "git_blob_sha": "d82b0820892c94be963fd958ef1817245c52a472",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "e07fd1167c2aaaa6fb965dd66e1e73b13c9c95b76b2d648b6e938780f30b37af"
+    },
+    {
+      "path": "LICENSES/QR-Code-Generator.txt",
+      "git_blob_sha": "f4669e77e856e69615db041c078090a9f69a4341",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "1c741053313681734c2d75dcfcc9efbe3754280b4f3788656d32871a885f42d6"
+    },
+    {
+      "path": "LICENSES/THIRD-PARTY.md",
+      "git_blob_sha": "30a76d5eea77d00b7bc5794f5a2443e5524a30a2",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "3fc49305ad26e0a9bbb455f4e3f03f55364280d0748c31fbbaaf407946719519"
+    },
+    {
+      "path": "README.md",
+      "git_blob_sha": "7b868e58d45bdc37179d9fa0292059dc84d3b094",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "1d3bf629946ff573c14d2734573aef886ffce778d2429868fdad82932bce06fd"
+    },
+    {
+      "path": "RELEASE_NOTES.md",
+      "git_blob_sha": "70aee4fa6e319670bb4804f5a9869c9a586d8552",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "e78547f14641046b3fcec41d3f253289c30c57c2811dea6f64e063b046fd0bd3"
+    },
+    {
+      "path": "TEST_REPORT.md",
+      "git_blob_sha": "9dceead004d105bb6f274d8f7ceea46ad29d47cf",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "eedf27fe87575fe757da7ccdbb8f475143ad1099d860fa2f5984aa0406fdfe06"
+    },
+    {
+      "path": "assets/fonts/jakarta-latin.woff2",
+      "git_blob_sha": "a180dc40f205fc48979a75ccbe8a10221a71a4ba",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "153fc85b70298beeb1d61a5f723331649e7f23bb77302a66e61cb3e2fbdb5e79"
+    },
+    {
+      "path": "assets/fonts/mono-latin.woff2",
+      "git_blob_sha": "cd5102a44c763f1cfe9f2b199fd5d7257491c0dd",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "18be452724bfdc236c074ca94a249a7f41a86752c7d04ab258ce9ed5651f6a7e"
+    },
+    {
+      "path": "assets/icon.ico",
+      "git_blob_sha": "308eae034ed868ebb943a7899869ab9036d2018c",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "cbfa75e66d09a883f1dbf1292441bd5b9df5493357b150703c529d7a6352c979"
+    },
+    {
+      "path": "assets/icon.svg",
+      "git_blob_sha": "b78f70d8d23c7e7ba42c642dbffc8528ef88c0d2",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "3af4d1a5c3aaf393960c08a83daab5077d4ae819267eff935cbb43913e5d242f"
+    },
+    {
+      "path": "assets/magic-roots-logo.png",
+      "git_blob_sha": "914878172f150ac2cd4c4b8c0d1ec38b22b314a9",
+      "present": false,
+      "verified_git_blob": false,
+      "sha256": null
+    },
+    {
+      "path": "css/invoice.css",
+      "git_blob_sha": "b8add623cd5670d12ddbd473b831f672c05b2334",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "1d5233c4b401def275b574a468b4fb2724e922b8882c6b3bb6fa519a40270564"
+    },
+    {
+      "path": "css/styles.css",
+      "git_blob_sha": "c9b5c9fb7a99a8a6e00f13da5fa261338cdc57dd",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "2ca5d12d56d4c668754fc297d378557126cc8eb1af4e3ab95f1dbcd0ba0ec657"
+    },
+    {
+      "path": "css/tailwind-input.css",
+      "git_blob_sha": "b5c61c956711f981a41e95f7fcf0038436cfbb22",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "cc1a7ad0d019ddb1d32d0ecb588ba0ac26ce41d8625dd6c366348b25f83a28ec"
+    },
+    {
+      "path": "css/tailwind.css",
+      "git_blob_sha": "0c286c530f90b3ba51ea75924dcae1280b3e1541",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "604bc2e1305ecbcd2f384029e194af7435cf3369a6f562283bcae1af1212436f"
+    },
+    {
+      "path": "desktop/legacy.cjs",
+      "git_blob_sha": "4061f5715d45d32fe5a7687bdb16754e7f5bae60",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "5edccf184355f313449fa1c36cf859e34951caf828b251dfc53bbdf7b5486b0e"
+    },
+    {
+      "path": "desktop/main.cjs",
+      "git_blob_sha": "1dafb0e315254cfa3768752256fb5dfd2827ff42",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "983f604319805a09a22fa4c2c7ec0d53f7bfb072e7363d274b57eb340c1475e1"
+    },
+    {
+      "path": "desktop/preload.cjs",
+      "git_blob_sha": "c5f82b9ba96011938660ace685c360f501fd9579",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "6d4e9e92b62760501832adb1ec1855d813c8cf6a22fdca25ea543c18b83e7d06"
+    },
+    {
+      "path": "desktop/store.cjs",
+      "git_blob_sha": "3038de5b4664ff9efbdc69aefb3e08eaea231854",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "cdd143a901fe69df13163bc9d20b7c8e740278038acc0375e8c23e7521fbe947"
+    },
+    {
+      "path": "desktop/workbooks.cjs",
+      "git_blob_sha": "fc6a7e26c0525f33965358a06dd222c605ded36b",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "646ae464f5471730bab06d494455c8a4f6530094f2b0d28dbe244163d73601b2"
+    },
+    {
+      "path": "index.html",
+      "git_blob_sha": "e40cd2cff93032dd024298a7a47cdd2284849795",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "878aa62c47f62f5cc60ac26057d06e8b370db5caedd3a945a67c33940749fa3d"
+    },
+    {
+      "path": "js/studio.js",
+      "git_blob_sha": "afdc10a02d04d382fbe5cb97b234a666b8fcad90",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "4d351983aa301b183c7da4ab12d6833444bd5ccfa56054aebfc73f5a170eb904"
+    },
+    {
+      "path": "lib/decimal.js",
+      "git_blob_sha": "23295c6acc56fc0a311848fea9270d2317c59249",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "6e99821f8204c5f611b56077e3fce056a1562d22bc341a1f4af01afe7e527d83"
+    },
+    {
+      "path": "lib/lucide.min.js",
+      "git_blob_sha": "93c7e308c058d2758cfb2c7b67898e2ea447d161",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "3411692820cb8d47543f69496aa25fd603a358f4498046f41c508a5a3342210e"
+    },
+    {
+      "path": "lib/qrcode.js",
+      "git_blob_sha": "76889b589ec831dd9b791601f6592793356ce9cd",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "18ae399f81182bc9de916e9c77b195df20cc58d6f2d55a62b085a299f1bf1780"
+    },
+    {
+      "path": "package-lock.json",
+      "git_blob_sha": "d876fc1d7700b985f0a615f7e5242f6ecb8186ad",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "31106fb6cd8079bd578fd3dbcd5eeea4fe7f120cf16bfecac2274839f85925b1"
+    },
+    {
+      "path": "package.json",
+      "git_blob_sha": "16f93cee2d56fd5234397e9804a1c5f7453b4cf2",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "824d7f700669310ce65ffbbc744504e0648c4446a26bc652302ea83983edaf61"
+    },
+    {
+      "path": "scripts/desktop-smoke.cjs",
+      "git_blob_sha": "0a0d4b2ff73553a1e896c74946f43d378bf89e43",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "c0bcb72eab043c7d383370ef2bb44633b0f9ddbdfdcda35f5ef3a9fd86d6b3c8"
+    },
+    {
+      "path": "scripts/installer-smoke.ps1",
+      "git_blob_sha": "97e4a56cd2206961fc6e1e18247cf2708a94b3b4",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "d039b30eb949b51ff64c1a925c6697cf0fad2e5c31398fce1460e340c3abd6e3"
+    },
+    {
+      "path": "scripts/make-icon.py",
+      "git_blob_sha": "032662529dbff0c3e8d3b4d147ea3e46076fdc61",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "8ca1758dc3d434bb6cedcd56fc4a83dfd7351527ead7f0fd6a1d936f9681d9b7"
+    },
+    {
+      "path": "scripts/packaged-smoke.cjs",
+      "git_blob_sha": "d8d63dc24fd6f6ccf14b1617b246ebf18544f02f",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "115e9e3f3090c29be4ea41c80e77a73e8467607ae32ec11dde28c0039b855f81"
+    },
+    {
+      "path": "scripts/portable-mode.example.json",
+      "git_blob_sha": "7c8d6b0156f20bdb954da8489231dc25894fd557",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "01159a23e1b59d3048811b5a2a5d53c1517284637376f6e4a74a44b4dab00adb"
+    },
+    {
+      "path": "scripts/portable-smoke.cjs",
+      "git_blob_sha": "01c6900ae699143d2a246439e719e64487a46be4",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "8f8135496dc46d0064ba066fd4b27300adfe3684063a929fdc59b29d7faaee1b"
+    },
+    {
+      "path": "scripts/shortcut-smoke.cjs",
+      "git_blob_sha": "3a98a63407806990d38761706e24292737c2bdbc",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "ce1b48da3f22b0e8f3d63aa96d442a71fa52cca0f3b109ae70d680d6c5fc1396"
+    },
+    {
+      "path": "scripts/verify-pdfs.py",
+      "git_blob_sha": "77a68c8c80af17766eb86757321af951b8302077",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "5e7e383546354357b2e89d98ae39beacd62f58252d90f0dd412f7fcebd2d2ec6"
+    },
+    {
+      "path": "server.js",
+      "git_blob_sha": "1f407ace8c7d06800a5374747848b63916980a38",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "c8cedfdf8b3d7ef58ab3aff0c143eb869d2a9091d84134edcddf92f4c721ed09"
+    },
+    {
+      "path": "shared/core.js",
+      "git_blob_sha": "9d35c8716b086536056488f01b9f23c310419828",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "cb982ffe3dc85ed852c7d6de1d28f3f31bdc2424546d4a1e07006a11ab621f07"
+    },
+    {
+      "path": "shared/invoice-view.js",
+      "git_blob_sha": "c8b06f081b784874e36e720d91ce3a6afa181e4e",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "5fbe31eeecc6997dc2a280afeaa69d784098e7d324d211bf596df5ea3e8a7fb0"
+    },
+    {
+      "path": "start.bat",
+      "git_blob_sha": "64a7f9a2e1c6f14383b274523ff811e8520398e4",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "f841ca541ce86b65aa16b0ab2569042a4a22a7943d9a843c6eed6f25e05d240e"
+    },
+    {
+      "path": "tailwind.config.cjs",
+      "git_blob_sha": "d465cc256c9c31e93c1e2691a4cb981cbae4ace5",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "82b63c2495f2b84a03f2376fd8edfc4f702285d3509506ca2b8a059e24735d02"
+    },
+    {
+      "path": "templates/InvoiceStudio-Template.xlsx",
+      "git_blob_sha": "15437dce23f1ac2819ac5081f5ee74d61a089cd3",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "589fab5e551413b09b6dc6622fd9c423e5e92c6808450eb56aad66500b0285aa"
+    },
+    {
+      "path": "tests/core.test.cjs",
+      "git_blob_sha": "22edf7bd2fd2a0fb8cb9cb4fedbebf1bdb39e905",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "fe4f2487554da406feca4b0d9922a202db85e1b6c154ce575e7b9531863b9aa5"
+    },
+    {
+      "path": "tests/helpers.cjs",
+      "git_blob_sha": "040595240dc7499ab585d358100473944d6619b2",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "42b5c2c5f775aee82795a19aaacdfa82e7d4d8cb49f15cf38da4cd6208b045ce"
+    },
+    {
+      "path": "tests/recovery.test.cjs",
+      "git_blob_sha": "76046f0d3d31577314d0b03ac20f0727830e3fc4",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "4794e66f68f9c8ca05ea0c4e572e7e93c47c3cd89f2fef1c7c03018c03691ec3"
+    },
+    {
+      "path": "tests/store.test.cjs",
+      "git_blob_sha": "ddc0de19f48eca9ee706ab037170b2ee3cf9c4c7",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "cdd2bae6398bee4e8ad8cbc6e33d6686f0997c96fd967b83270a64cbade1c865"
+    },
+    {
+      "path": "tests/workbooks.test.cjs",
+      "git_blob_sha": "4063bc452cfb60754a0d68906e87700ade4a67d1",
+      "present": true,
+      "verified_git_blob": true,
+      "sha256": "26490e41dbde6e2812c84df8ca9e14bc7c41dee12bf8fec8e9f5869aa57140c6"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+import {fieldDefinition} from './fields.ts';
+import {STATE_CODES} from './validation.ts';
+export interface PreviewField {label:string;scope:'draft'|'business';type:'text'|'textarea'|'date'|'decimal'|'boolean'|'state'|'choice';options?:string[];validate:(value:string)=>string|null}
+const business:Record<string,string>={brandName:'Brand name',name:'Legal business name',logoData:'Company logo',tagline:'Tagline',address:'Company address',city:'City',pincode:'PIN code',gstin:'Company GSTIN',pan:'Company PAN',phone:'Contact phone',email:'Contact email',fssai:'Product licence / FSSAI',bankName:'Bank name',accountNumber:'Account number',ifsc:'IFSC',bank:'Additional bank details',upi:'UPI ID',paymentTerms:'Default payment terms',stampData:'Company stamp',signatureData:'Authorised signature'};
+export function previewField(path:string,scope:'draft'|'business'='draft'):PreviewField|null {
+ if(scope==='business'){const label=business[path];return label?{label,scope,type:['address','bank'].includes(path)?'textarea':'text',validate:()=>null}:null;}
+ if(/^lines\.\d+\.rateBasis$/.test(path))return {label:'Rate basis',scope:'draft',type:'choice',options:['piece','unit'],validate:v=>['piece','unit'].includes(v)?null:'Choose rate basis.'};
+ if(path==='reverseCharge')return {label:'Reverse charge',scope:'draft',type:'boolean',validate:value=>['true','false'].includes(value)?null:'Choose Yes or No.'};
+ if(path==='treatment'){const options=['domestic','exportLUT','exportTax','SEZLUT','SEZTax'];return {label:'Supply treatment',scope:'draft',type:'choice',options,validate:value=>options.includes(value)?null:'Choose a valid supply treatment.'};}
+ const allowed=/^(proformaValidUntil|receiptPurpose|dispatchReason|paymentTerms|purchaseOrderNumber|date|dueDate|customerName|address|shipTo|shipToCity|shipToPincode|shipToName|shipToGstin|shipToState|shipToSameGstin|placeOfSupply|notes|transport|treatment|reverseCharge|freight|packing|discount|roundOff|lines\.\d+\.(description|hsn|quantity|unit|rate|discount|gst|cess|inclusive|category|batch|expiry|casePack)|logistics\.[a-zA-Z]+)$/;
+ if(!allowed.test(path))return null;const definition=fieldDefinition(path);if(!definition&&!path.startsWith('logistics.'))return null;
+ const type=['placeOfSupply','shipToState'].includes(path)?'state':path==='reverseCharge'||path==='shipToSameGstin'||path.endsWith('.inclusive')?'boolean':definition?.type||'text';
+ return {label:definition?.label||path.replace('logistics.','').replace(/([A-Z])/g,' $1'),scope:'draft',type,validate:value=>{if(type==='state')return STATE_CODES.has(value)?null:'Select a valid place of supply.';if(type==='boolean')return ['true','false'].includes(value)?null:'Choose Yes or No.';return definition?.validate(value)||null;}};
+}

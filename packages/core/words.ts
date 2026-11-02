@@ -1,0 +1,4 @@
+const ones=['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+const tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+function integer(n:bigint):string{if(n<20n)return ones[Number(n)]!;if(n<100n)return tens[Number(n/10n)]+(n%10n?' '+ones[Number(n%10n)]:'');if(n<1000n)return integer(n/100n)+' Hundred'+(n%100n?' '+integer(n%100n):'');for(const [divisor,label]of [[10000000n,'Crore'],[100000n,'Lakh'],[1000n,'Thousand']] as const)if(n>=divisor)return integer(n/divisor)+' '+label+(n%divisor?' '+integer(n%divisor):'');throw Error('Invalid amount.');}
+export function amountInWords(paise:number):string{if(!Number.isSafeInteger(paise)||paise<0)throw Error('Invalid paise amount.');const n=BigInt(paise);return integer(n/100n)+' Rupees'+(n%100n?' and '+integer(n%100n)+' Paise':'')+' Only';}

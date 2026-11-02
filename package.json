@@ -1,0 +1,81 @@
+{
+  "name": "invoice-studio-4",
+  "version": "4.0.0-dev.8",
+  "private": true,
+  "type": "module",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "test": "node --test --test-isolation=none --test-reporter=tap packages/testing/*.test.ts",
+    "test:offline": "node --test --test-isolation=none --test-reporter=tap packages/testing/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "node scripts/check-source.mjs",
+    "build": "node scripts/build.mjs",
+    "start": "electron .",
+    "test:desktop": "node scripts/v12-acceptance.mjs",
+    "dist:win": "npm run build && electron-builder --win nsis portable --x64 --publish never",
+    "parse": "node --experimental-vm-modules scripts/parse-source.mjs",
+    "check:links": "node --experimental-vm-modules scripts/check-links.mjs",
+    "test:desktop:compliance": "node scripts/v12-compliance.mjs",
+    "test:desktop:controls": "node scripts/v12-reliability.mjs",
+    "test:desktop:billing": "node scripts/redesign-smoke.mjs",
+    "test:desktop:pdf": "node scripts/v12-pdf-matrix.mjs",
+    "test:desktop:preservation": "node scripts/v12-cleanup.mjs",
+    "test:desktop:recovery": "node scripts/v12-reliability.mjs"
+  },
+  "dependencies": {
+    "@tesseract.js-data/eng": "1.0.0",
+    "ajv": "8.17.1",
+    "decimal.js": "10.6.0",
+    "exceljs": "4.4.0",
+    "jszip": "3.10.1",
+    "pdf-lib": "1.17.1",
+    "pdfjs-dist": "6.4.299",
+    "preact": "10.26.4",
+    "tesseract.js": "5.1.1",
+    "zod": "3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "24.0.0",
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0",
+    "playwright-core": "1.64.1",
+    "typescript": "5.8.3",
+    "vite": "6.2.6"
+  },
+  "build": {
+    "appId": "in.ExampleBrand.invoicestudio4",
+    "productName": "Invoice Studio 4",
+    "directories": {
+      "output": "release/artifacts"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json",
+      "LICENSES/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": false
+    },
+    "portable": {
+      "artifactName": "Invoice-Studio-4-${version}-Portable.${ext}"
+    },
+    "asarUnpack": [
+      "node_modules/tesseract.js/**",
+      "node_modules/tesseract.js-core/**",
+      "node_modules/@tesseract.js-data/eng/**"
+    ]
+  },
+  "description": "Invoice Studio 4 \u2014 offline TEST source handover",
+  "author": "Example Brand",
+  "license": "UNLICENSED"
+}

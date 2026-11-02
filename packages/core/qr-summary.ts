@@ -1,0 +1,5 @@
+import type {Snapshot,Totals} from './model.ts';
+import {fromMinor} from './money.ts';
+/** GSTN FAQ 80: main HSN belongs to a line with the highest taxable value. */
+export function mainHsnCodes(t:Pick<Totals,'lines'>):string[]{if(!t.lines.length)return [];const highest=Math.max(...t.lines.map(l=>l.taxable));return [...new Set(t.lines.filter(l=>l.taxable===highest).map(l=>l.hsn))];}
+export function demoQrSummary(s:Snapshot,reference:string,irn:string,registrationDate:string){const d=s.document,p=s.profile,b=s.buyer,t=s.totals;return ['DEMO - NOT REGISTERED','Document: '+reference,'Type: '+d.type,'Date: '+d.date,'Seller: '+(p.brandName||p.name).slice(0,50),'Seller GSTIN: '+(p.gstin||'DEMO seller'),'Buyer: '+(d.customerName||b.name).slice(0,50),'Buyer GSTIN: '+(b.gstin||'Unregistered'),'Taxable INR: '+fromMinor(t.taxable),'GST INR: '+fromMinor(t.tax),'Total INR: '+fromMinor(t.total),'Item count: '+t.lines.length,'Main HSN: '+(mainHsnCodes(t)[0]||'N/A'),'Sample IRN: '+irn,'Sample IRN generated: '+registrationDate,'Sample ACK: 999000000000012','Registration: DEMO - NOT REGISTERED'].join('\n');}

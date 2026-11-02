@@ -1,0 +1,56 @@
+import {PRINT_FIELDS,presentationErrors} from './presentation.ts';
+import {logisticsErrors} from './logistics.ts';
+import {DOCUMENT_TYPES} from './model.ts';
+import type {Draft,Profile,HealthIssue,Customer,Product} from './model.ts';
+import {calculate,dec,percent,validDate} from './money.ts';
+export const STATE_CODES=new Set(['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','26','27','29','30','31','32','33','34','35','36','37','38','96','97']);
+export function id(value:unknown):asserts value is string {if(typeof value!=='string'||!/^[A-Za-z0-9_-]{1,100}$/.test(value))throw Error('Invalid identifier.');}
+export function text(value:unknown,label:string,max=1000):asserts value is string {if(typeof value!=='string'||value.length>max||value.includes('\0'))throw Error(`${label} is invalid or too long.`);}
+export function gstinValid(s:string):boolean {if(!/^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(s))return false;const state=Number(s.slice(0,2));if(state<1||state>38||[25,28].includes(state))return false;const chars='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';let factor=2,total=0;for(let i=13;i>=0;i--){const x=chars.indexOf(s[i]!)*factor;total+=Math.floor(x/36)+x%36;factor=factor===2?1:2;}return chars[(36-total%36)%36]===s[14];}
+export function validateTypography(v:unknown){const t=v as {fontFamily:string;fontSizePt:number};if(!t||!['Segoe UI','Arial','Cambria'].includes(t.fontFamily)||!Number.isFinite(t.fontSizePt)||t.fontSizePt<8||t.fontSizePt>12||t.fontSizePt*2%1!==0)throw Error('Choose Segoe UI, Arial or Cambria and a font size from 8 to 12pt in half-point steps.');}
+export function validateAppearance(value:Draft['appearance']):void {
+ if(!value||typeof value!=='object'||Array.isArray(value))throw Error('Invalid print settings.');
+ for(const key of ['bank','terms','hsnSummary','shipTo','transport','batch','discount','cases','words','signature','balance','qr','logo'] as const)if(typeof value[key]!=='boolean')throw Error('Invalid print toggle '+key);
+ for(const k of ['einvoiceQr','stamp'] as const)if(value[k]!==undefined&&typeof value[k]!=='boolean')throw Error('Invalid visibility toggle.');if(value.visibility&&(typeof value.visibility!=='object'||Object.entries(value.visibility).some(([k,v])=>!PRINT_FIELDS.includes(k)||typeof v!=='boolean')))throw Error('Invalid print visibility.');
+ if(value.typography)validateTypography(value.typography);if(value.signingSpace!==undefined&&!['compact','handwriting'].includes(value.signingSpace))throw Error('Invalid signing space.');if(value.showCaseCalculation!==undefined&&typeof value.showCaseCalculation!=='boolean')throw Error('Invalid case calculation display.');
+ if(!['normal','compact'].includes(value.density)||value.copies!==undefined&&![1,3].includes(value.copies))throw Error('Invalid print density or copy count.');text(value.preset,'Print preset',100);if(value.copyLabel!==undefined)text(value.copyLabel,'Copy label',100);
+}
+export function validateDraft(d:Draft,editing=false):void {
+  id(d.id);if(!Number.isSafeInteger(d.version)||d.version<0)throw Error('Invalid draft version.');
+  if(!DOCUMENT_TYPES.includes(d.type))throw Error('Unknown document type.');
+  text(d.date,'Document date',100);text(d.dueDate,'Due date',100);if(!editing&&(!validDate(d.date)||!validDate(d.dueDate)||d.dueDate<d.date))throw Error('Enter valid document/due dates.');
+  for(const k of ['customerId','customerName','address','shipTo','placeOfSupply','notes','transport','originalId','reason'] as const)text(d[k],k,10000);
+  if(!['domestic','exportLUT','exportTax','SEZLUT','SEZTax'].includes(d.treatment))throw Error('Invalid supply treatment.');
+  if(typeof d.reverseCharge!=='boolean'||!d.appearance||typeof d.appearance!=='object'||!d.provenance||typeof d.provenance!=='object')throw Error('Invalid draft settings.');
+  validateAppearance(d.appearance);for(const l of d.lines||[]){if(l.unitDisplay!==undefined&&!['normal','none'].includes(l.unitDisplay))throw Error('Invalid unit label preference.');if(l.unitDescription!==undefined)text(l.unitDescription,'Unit description',80);if(l.rateBasis!==undefined&&!['piece','unit'].includes(l.rateBasis))throw Error('Invalid rate basis.');if(!editing&&['CASE','CAS','CASES'].includes(l.unit.toUpperCase())&&(!/^\d+$/.test(l.casePack)||dec(l.casePack).lte(0)))throw Error('Pieces per case must be a positive whole number.');}
+  if(!Array.isArray(d.lines)||d.lines.length>1000)throw Error('Too many lines.');const ids=new Set<string>();
+  for(const l of d.lines){id(l.id);if(ids.has(l.id))throw Error('Duplicate line ID.');ids.add(l.id);for(const k of ['productId','description','hsn','unit','quantity','rate','discount','gst','cess','casePack','batch','expiry'] as const)text(l[k],k,10000);if(!['taxable','nil','exempt','nonGST'].includes(l.category)||typeof l.inclusive!=='boolean')throw Error('Invalid line classification.');}
+  for(const key of ['shipToCity','shipToPincode','shipToName','shipToGstin','shipToState'] as const)if(d[key]!==undefined)text(d[key],key,5000);if(d.shipToSameGstin!==undefined&&typeof d.shipToSameGstin!=='boolean')throw Error('Invalid shipping GSTIN preference.');if(!editing&&d.shipToGstin&&!gstinValid(d.shipToGstin))throw Error('Shipping GSTIN checksum is invalid.');if(!editing&&d.shipToState&&!STATE_CODES.has(d.shipToState))throw Error('Choose a valid shipping state.');if(!editing&&d.shipToGstin&&d.shipToState&&d.shipToGstin.slice(0,2)!==d.shipToState)throw Error('Shipping GSTIN and shipping state differ.');
+  if(!editing&&d.shipToPincode&&!/^\d{6}$/.test(d.shipToPincode))throw Error('Shipping PIN must contain six digits.');
+  for(const key of ['paymentTerms','purchaseOrderNumber','copyOrigin','proformaValidUntil','receiptPurpose','dispatchReason'] as const)if(d[key]!==undefined)text(d[key],key,1000);if(d.dispatchSource&&!['business','warehouse','manual'].includes(d.dispatchSource))throw Error('Invalid dispatch source.'); if(d.logistics)for(const value of Object.values(d.logistics))text(value,'Transport field',5000); const logistics=logisticsErrors(d);if(!editing&&logistics.length)throw Error(logistics.map(x=>x.message).join(' '));
+  if(!editing&&d.proformaValidUntil&&!validDate(d.proformaValidUntil))throw Error('Enter a valid proforma validity date.');if(d.stockReviewId)id(d.stockReviewId);
+  if(JSON.stringify(d).length>2000000)throw Error('Document too large.');
+}
+export function health(d:Draft,p:Profile):HealthIssue[]{
+  const a:HealthIssue[]=presentationErrors(d,p).map(message=>({field:'appearance',message,severity:'error' as const}));const error=(field:string,message:string)=>a.push({field,message,severity:'error'});
+  try{validateDraft(d);}catch(e){error('document',(e as Error).message);return a;}
+  if(!p.name.trim()||!p.address.trim())error('profile','Enter business name and address.');
+  if((p.composition||p.registered===false)&&d.type==='TAX_INVOICE')error('document','Choose Bill of Supply for the saved business registration preference.');
+  if(p.mode!=='TEST')error('profile','Live issuance is not approved.');
+  if(!d.customerId||!d.customerName.trim()||!d.address.trim())error('customerId','Select a customer with a billing address.');
+  if(!STATE_CODES.has(d.placeOfSupply))error('placeOfSupply','Confirm a valid place of supply.');
+  if(d.type!=='ADVANCE_RECEIPT'&&!d.lines.length)error('lines','Add at least one item.');
+  for(const [i,l] of d.lines.entries()){
+    if(l.expiry&&!validDate(l.expiry))error(`lines.${i}.expiry`,'Enter a valid expiry date.');
+    if(!l.description.trim())error(`lines.${i}.description`,'Enter an item description.');
+    if(!/^\d{4,8}$/.test(l.hsn))error(`lines.${i}.hsn`,'HSN must contain 4–8 digits.');
+    if(l.category==='taxable'&&l.gst==='')error(`lines.${i}.gst`,'Enter an explicit GST rate.');
+    if(d.type==='BILL_OF_SUPPLY'&&l.category==='taxable')error(`lines.${i}.category`,'Review taxable lines before using Bill of Supply.');
+  }
+  if(['CREDIT_NOTE','DEBIT_NOTE'].includes(d.type)&&(!d.originalId||d.reason.trim().length<3))error('originalId','Link an original document and enter a reason.');
+  if(d.treatment!=='domestic')a.push({field:'treatment',message:'Special supply treatment requires CA review; TEST only.',severity:'warning'});
+  try{if(p.ewayThreshold&&calculate(d,p).total>=Number(p.ewayThreshold)*100&&Number(p.ewayThreshold)>0)a.push({field:'logistics.ewayBillNumber',message:'Configured e-way review threshold reached. Review dispatch and external references.',severity:'warning'});calculate(d,p);}catch(e){error('lines',(e as Error).message);}
+  return a;
+}
+export function validateCustomer(c:Customer):void {for(const key of ['paymentTerms','preferredTransporterName','preferredTransporterId','preferredTransportMode'] as const)if(c[key]!==undefined)text(c[key],key,500);if(c.preferredTransportMode&&!['road','rail','air','ship'].includes(c.preferredTransportMode))throw Error('Invalid preferred transport mode.');id(c.id);if(!Number.isSafeInteger(c.revision)||c.revision<0)throw Error('Invalid customer revision.');for(const key of ['phone','email','city','pincode','shippingCity','shippingPincode','shippingAddress','shippingName','shippingGstin','shippingState'] as const)if(c[key]!==undefined)text(c[key],key,5000);if(c.archived!==undefined&&typeof c.archived!=='boolean')throw Error('Invalid archive flag.');text(c.name,'Name',500);text(c.address,'Address',5000);if(!c.name.trim()||!c.address.trim()||!STATE_CODES.has(c.state))throw Error('Name, address and state are required.');if(c.shippingPincode&&!/^\d{6}$/.test(c.shippingPincode))throw Error('Shipping PIN must contain six digits.');if(c.shippingGstin&&!gstinValid(c.shippingGstin))throw Error('Invalid shipping GSTIN checksum.');if(c.shippingState&&!STATE_CODES.has(c.shippingState))throw Error('Invalid shipping state.');if(c.shippingGstin&&c.shippingState&&c.shippingGstin.slice(0,2)!==c.shippingState)throw Error('Shipping GSTIN and state differ.');if(c.gstin&&!gstinValid(c.gstin))throw Error('Invalid GSTIN checksum.');if(c.creditLimit)dec(c.creditLimit);if(c.shippingAddress)text(c.shippingAddress,'Shipping address',5000);if(!Number.isInteger(c.termsDays)||c.termsDays<0||c.termsDays>3650||!['customer','supplier'].includes(c.kind))throw Error('Invalid customer terms or type.');}
+export function validateProduct(p:Product):void {if(p.unitDescription!==undefined)text(p.unitDescription,'Unit description',80);id(p.id);if(!Number.isSafeInteger(p.revision)||p.revision<0)throw Error('Invalid product revision.');for(const key of ['archived','allowNegative'] as const)if(p[key]!==undefined&&typeof p[key]!=='boolean')throw Error('Invalid product flag.');if(p.saleUnit!==undefined)text(p.saleUnit,'Sale unit',16);text(p.sku,'SKU',100);text(p.name,'Name',500);if(!p.name.trim()||!p.sku.trim()||!/^\d{4,8}$/.test(p.hsn))throw Error('Name, SKU and HSN are required.');dec(p.rate);percent(p.gst);if(p.mrp)dec(p.mrp);if(p.purchaseCost)dec(p.purchaseCost);if(p.barcode)text(p.barcode,'Barcode',100);if(dec(p.casePack).lte(0))throw Error('Case pack must be positive.');dec(p.reorder);if(!['taxable','nil','exempt','nonGST'].includes(p.category)||typeof p.tracked!=='boolean'||typeof p.batchTracked!=='boolean')throw Error('Invalid product flags.');}

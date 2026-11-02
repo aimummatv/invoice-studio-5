@@ -1,0 +1,9 @@
+{
+  "referenceCommit": "9d3537a8188ad03c7186ab721596d5a3a0e394ab",
+  "matchedFiles": 52,
+  "missingReferenceFiles": [
+    "assets/magic-roots-logo.png"
+  ],
+  "changedReferenceFiles": [],
+  "referenceModifiedByAudit": false
+}

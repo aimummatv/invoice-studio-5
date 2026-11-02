@@ -1,0 +1,5 @@
+import {gstinValid,STATE_CODES} from './validation.ts';
+export interface PincodeRow {pincode:string;city:string;state:string;district:string;sourceVersion:string}
+export function validatePincodeRow(r:PincodeRow){if(!/^\d{6}$/.test(r.pincode)||!r.city.trim()||!STATE_CODES.has(r.state)||!r.sourceVersion.trim())throw Error('Pincode rows need six digits, city, state and a source version.');}
+export function pincodeSuggestion(rows:PincodeRow[],pincode:string){if(!/^\d{6}$/.test(pincode))return {status:'invalid',suggestions:[]};const found=rows.filter(r=>r.pincode===pincode);const unique=[...new Map(found.map(r=>[r.city+'|'+r.state,r])).values()];return {status:unique.length===1?'suggestion':unique.length?'choose':'not-in-dataset',suggestions:unique,notice:'Suggestion only. Confirm the address; never infer place of supply from postcode alone.'};}
+export function gstinHints(gstin:string){return gstinValid(gstin)?{valid:true,stateHint:gstin.slice(0,2),pan:gstin.slice(2,12),notice:'Offline syntax/checksum only. Registration and supply context are not verified.'}:{valid:false,stateHint:'',pan:'',notice:'Invalid offline GSTIN syntax/checksum.'};}

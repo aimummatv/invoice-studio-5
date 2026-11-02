@@ -1,0 +1,51 @@
+import {randomUUID} from 'node:crypto';
+import {DatabaseSync} from 'node:sqlite';
+import {readFileSync} from 'node:fs';
+import {Store,hash,canonical} from '../db/store.ts';
+import {auditV3Copy,legacyId} from './migration.ts';
+import {D,dec,validDate} from '../core/money.ts';
+export function acceptLegacy(s:Store,token:string,jobId:string,reviewReference:string,acknowledgement:string){
+ const actor=s.actor(token,'approve');if(acknowledgement!=='ACCEPT TEST MIGRATION'||reviewReference.trim().length<3)throw Error('Review the reconciliation and enter ACCEPT TEST MIGRATION with a review reference.');
+ return s.tx(()=>{const job=s.db.prepare("SELECT * FROM import_jobs WHERE id=? AND kind='v3'").get(jobId);if(!job)throw Error('Preview unavailable.');const data=JSON.parse(job.payload as string);if(data.report.mismatches.length||!validDate(data.report.cutoverDate))throw Error('Resolve migration mismatches first.');const acceptance={report:data.report,unpostedOpenings:true,pdfExceptions:data.report.pdfInventory.filter((p:{status:string})=>p.status!=='matched'),acknowledgement};
+ s.db.prepare('INSERT INTO migration_acceptances VALUES(?,?,?,?,?,?,?,?)').run(...([jobId,job.source_hash,data.report.reportHash,data.report.cutoverDate,reviewReference,canonical(acceptance),actor.id,new Date().toISOString()] as any[]));s.audit(actor,'migration-reconciliation-accepted',jobId,{reportHash:data.report.reportHash,reviewReference});return {id:jobId,accepted:true,openingsStillRequired:true};});
+}
+export async function commitLegacy(s:Store,token:string,jobId:string,acknowledgement:string){
+ const actor=s.actor(token,'approve');s.actor(token,'tax');if(acknowledgement!=='IMPORT INTO TEST')throw Error('Confirm IMPORT INTO TEST.');
+ const job=s.db.prepare("SELECT * FROM import_jobs WHERE id=? AND kind='v3'").get(jobId);if(!job)throw Error('Migration preview unavailable.');if(job.state==='committed')return {replayed:true};
+ const data=JSON.parse(job.payload as string),accepted=s.db.prepare('SELECT * FROM migration_acceptances WHERE job_id=?').get(jobId);if(!accepted)throw Error('Accept the reconciliation before importing.');
+ const report=auditV3Copy(data.path,{cutoverDate:data.report.cutoverDate,pdfFolder:data.pdfFolder});if(report.mismatches.length||report.sourceHash!==job.source_hash||report.reportHash!==accepted.report_hash)throw Error('Source, PDF inventory or reconciliation changed; preview and accept again.');
+ await s.backup(token,'before-v3-test-import');const source=new DatabaseSync(data.path,{readOnly:true});
+ try{return s.tx(()=>{
+  const counts:Record<string,number>={};
+  for(const inventory of report.inventory){const table=inventory.table;if(!/^[a-z_]+$/.test(table))throw Error('Invalid source table.');let count=0;for(const row of source.prepare(`SELECT * FROM ${table}`).all()){
+   const sourceId=String(row.id||hash(canonical(row)));const serialized=canonical(row),kind='table:'+table;
+   const previous=s.db.prepare('SELECT payload FROM legacy_records WHERE source_hash=? AND kind=? AND source_id=?').get(report.sourceHash,kind,sourceId);
+   if(previous&&previous.payload!==serialized)throw Error('Historical record conflicts with a previous import.');
+   if(!previous)s.db.prepare('INSERT INTO legacy_records VALUES(?,?,?,?)').run(report.sourceHash,kind,sourceId,serialized);count++;
+   if(table==='parties'){const c=JSON.parse(row.payload as string),id=legacyId(report.sourceHash,row.id);if(!s.customers().some(x=>x.id===id))s.saveCustomer(token,{id,revision:0,name:c.name,address:c.billingAddress||c.shippingAddress||'',shippingAddress:c.shippingAddress||'',state:String(c.stateCode||''),gstin:c.gstin||'',kind:'customer',termsDays:Number(/\d+/.exec(c.paymentTerms||'')?.[0]||0),phone:c.phone||'',email:c.email||''});}
+   if(table==='products'){const p=JSON.parse(row.payload as string),id=legacyId(report.sourceHash,row.id);if(!s.products().some(x=>x.id===id))s.saveProduct(token,{id,revision:0,sku:'V3-'+hash(String(row.id)).slice(0,12),name:p.name,hsn:String(p.hsn||''),unit:p.unit||'NOS',rate:String(p.price||'0'),gst:String(p.gstRate||'0'),category:p.taxability||'taxable',casePack:String(p.casePack||'1'),tracked:false,batchTracked:false,reorder:'0',barcode:p.barcode||''});}
+  }if(count!==inventory.count)throw Error('Source count changed during import: '+table);counts[table]=count;}
+  for(const mapped of report.documents)s.db.prepare('INSERT OR IGNORE INTO legacy_records VALUES(?,?,?,?)').run(report.sourceHash,'mapped-document',mapped.id,canonical(mapped));
+  for(const pdf of report.pdfInventory){if(pdf.status!=='matched')continue;const original=pdf.files[0]!;const bytes=readFileSync(original.path);if(hash(bytes)!==original.hash)throw Error('Original PDF changed before preservation.');const id=legacyId(report.sourceHash,pdf.documentId),relative=`Legacy/${report.sourceHash}/PDFs/${id}.pdf`;const preserved=s.atomicFile(relative,bytes);if(!s.db.prepare('SELECT 1 FROM legacy_files WHERE id=?').get(id))s.db.prepare('INSERT INTO legacy_files VALUES(?,?,?,?,?)').run(id,report.sourceHash,pdf.documentId,relative,preserved.hash);}
+  s.db.prepare('INSERT OR IGNORE INTO legacy_records VALUES(?,?,?,?)').run(report.sourceHash,'reconciliation','accepted',canonical(report));
+  const cutover=s.db.prepare("SELECT revision FROM app_settings WHERE key='migrationCutover'").get();s.db.prepare('INSERT INTO app_settings VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET revision=excluded.revision,payload=excluded.payload').run('migrationCutover',Number(cutover?.revision||0)+1,canonical({jobId,sourceHash:report.sourceHash,cutoverDate:report.cutoverDate,openingsConfirmed:false}));
+  s.db.prepare("UPDATE import_jobs SET state='committed' WHERE id=?").run(jobId);s.audit(actor,'v3-test-history-imported',jobId,{sourceHash:report.sourceHash,reportHash:report.reportHash,counts,openingBalancesNotPosted:true});
+  return {sourceHash:report.sourceHash,reportHash:report.reportHash,counts,documents:report.issuedSnapshots,openings:report.parties.map(p=>({partyId:p.targetId,amountMinor:p.openingBalance})),stockOpenings:report.stock,notice:'Historical snapshots, identifiers and original PDFs were preserved separately. Review and post cutover opening balances and stock through the opening import; history is not reposted.'};
+ });}finally{source.close();}
+}
+
+export function confirmCutover(s:Store,token:string,jobId:string,reviewReference:string,acknowledgement:string){
+ const actor=s.actor(token,'approve');if(acknowledgement!=='CONFIRM TEST CUTOVER'||reviewReference.trim().length<3)throw Error('Review the opening reconciliation and enter CONFIRM TEST CUTOVER.');
+ const accepted=s.db.prepare('SELECT * FROM migration_acceptances WHERE job_id=?').get(jobId),job=s.db.prepare("SELECT * FROM import_jobs WHERE id=? AND state='committed'").get(jobId);if(!accepted||!job)throw Error('Import the accepted historical copy first.');const report=JSON.parse(String(accepted.payload)).report;
+ const differences:{kind:string;id:string;expected:string;actual:string}[]=[];
+ for(const party of report.parties){const actual=s.db.prepare("SELECT COALESCE(SUM(amount),0) total FROM ledger WHERE party_id=? AND date=? AND kind IN('opening-debit','opening-credit')").get(party.targetId,report.cutoverDate)!.total;if(Number(actual)!==party.openingBalance)differences.push({kind:'party-opening',id:party.targetId,expected:String(party.openingBalance),actual:String(actual)});}
+ for(const stock of report.stock){const review=s.db.prepare("SELECT payload FROM legacy_records WHERE source_hash=? AND kind=? AND json_extract(payload,'$.sourceProductId')=? ORDER BY rowid DESC LIMIT 1").get(report.sourceHash,'stock-unit-review:'+jobId,stock.sourceId);if(!review){differences.push({kind:'stock-unit-review-required',id:stock.targetId,expected:'Reviewed base-unit opening quantity',actual:'Unverified v3 ledger units: '+stock.quantity});continue;}const expected=JSON.parse(String(review.payload)).baseQuantity;const rows=s.db.prepare("SELECT quantity FROM stock_movements WHERE product_id=? AND date=? AND kind='opening'").all(stock.targetId,report.cutoverDate);const actual=rows.reduce((n,row)=>n.plus(String(row.quantity)),new D(0));if(!actual.eq(expected))differences.push({kind:'stock-opening',id:stock.targetId,expected,actual:actual.toString()});}
+ if(differences.length)return {confirmed:false,differences,notice:'Import the reviewed opening entries on the cutover date, then reconcile again.'};
+ return s.tx(()=>{const result={sourceHash:report.sourceHash,cutoverDate:report.cutoverDate,reviewReference,confirmed:true,at:new Date().toISOString()};s.db.prepare('INSERT OR IGNORE INTO legacy_records VALUES(?,?,?,?)').run(report.sourceHash,'cutover','confirmed',canonical(result));const setting=s.db.prepare("SELECT revision FROM app_settings WHERE key='migrationCutover'").get();s.db.prepare('INSERT INTO app_settings VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET revision=excluded.revision,payload=excluded.payload').run('migrationCutover',Number(setting?.revision||0)+1,canonical({...result,openingsConfirmed:true}));s.audit(actor,'test-cutover-confirmed',jobId,result);return result;});
+}
+
+export function reviewLegacyStock(s:Store,token:string,jobId:string,sourceProductId:string,baseQuantity:string,reviewReference:string,reason:string){
+ const actor=s.actor(token,'approve');const job=s.db.prepare("SELECT * FROM import_jobs WHERE id=? AND kind='v3'").get(jobId);if(!job)throw Error('Migration preview unavailable.');const report=JSON.parse(String(job.payload)).report;
+ if(!report.stock.some((stock:{sourceId:string})=>stock.sourceId===sourceProductId))throw Error('Choose a source product from the stock reconciliation.');if(!reviewReference||reason.trim().length<3)throw Error('Enter the unit/physical-count review reference and reason.');const quantity=dec(baseQuantity).toString();const review={sourceProductId,targetId:legacyId(report.sourceHash,sourceProductId),baseQuantity:quantity,reviewReference,reason,actorId:actor.id,at:new Date().toISOString()};
+ s.tx(()=>{s.db.prepare('INSERT INTO legacy_records VALUES(?,?,?,?)').run(report.sourceHash,'stock-unit-review:'+jobId,randomUUID(),canonical(review));s.audit(actor,'migration-stock-unit-reviewed',jobId,{sourceProductId,baseQuantity:quantity,reviewReference,reason});});return {id:jobId,...review};
+}

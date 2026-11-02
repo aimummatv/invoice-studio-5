@@ -1,0 +1,81 @@
+import {backup,DatabaseSync} from 'node:sqlite';
+import {randomUUID} from 'node:crypto';
+import {mkdirSync,existsSync,readFileSync,writeFileSync,renameSync,copyFileSync,rmSync,readdirSync,lstatSync} from 'node:fs';
+import {resolve,join,relative,dirname,isAbsolute,sep} from 'node:path';
+import {Store,hash} from './store.ts';
+import {newDraft,newLine,businessDate} from '../core/model.ts';
+import type {Customer,Product} from '../core/model.ts';
+import {EXAMPLE_BRAND_LOGO} from '../core/brand.ts';
+
+type FileEntry={path:string;hash:string};
+interface Manifest {version:1;id:string;root:string;state:'preparing'|'active'|'restoring'|'completed';checkpointHash:string;baseline:Record<string,string[]>;files:FileEntry[];demoFiles:FileEntry[];retired?:FileEntry[];createdAt:string}
+const BASE_TABLES=['documents','drafts','customers','products','payments','purchase_documents'];
+export class DemoSession {
+ readonly root:string;readonly directory:string;readonly pointer:string;manifest:Manifest|null=null;
+ constructor(root:string){this.root=resolve(root);this.directory=this.root+'.demo-sessions';this.pointer=join(this.directory,'current.json');if(existsSync(this.pointer)){const p=JSON.parse(readFileSync(this.pointer,'utf8'));if(!/^[a-f0-9-]{36}$/.test(p.id))throw Error('Invalid demo session identifier.');this.manifest=JSON.parse(readFileSync(join(this.directory,p.id,'manifest.json'),'utf8'));if(this.manifest?.root!==this.root||this.manifest?.id!==p.id||this.manifest.version!==1)throw Error('Demo checkpoint does not belong to this workspace.');}}
+ get active(){return this.manifest?.state==='active';}
+ get sessionDirectory(){if(!this.manifest)throw Error('No demo session.');return join(this.directory,this.manifest.id);}
+ status(){return {active:this.active,recoveryPending:!!this.manifest&&!this.active,id:this.manifest?.id||'',documents:12,drafts:3,protectedDraftIds:this.manifest?.baseline.drafts||[],protectedDocumentIds:this.manifest?.baseline.documents||[],notice:'Existing records are paused. Removing demo data restores the pre-demo records and settings.'};}
+ private persist(){if(!this.manifest)return;const file=join(this.sessionDirectory,'manifest.json');const stage=file+'.tmp';writeFileSync(stage,JSON.stringify(this.manifest),{mode:0o600});renameSync(stage,file);}
+ private scan():FileEntry[]{const result:FileEntry[]=[];const walk=(folder:string)=>{for(const e of readdirSync(folder,{withFileTypes:true})){const file=join(folder,e.name);if(e.isSymbolicLink())throw Error('Demo checkpoint does not accept symbolic links.');if(e.isDirectory()){if(relative(this.root,file)==='Data')continue;walk(file);}else if(e.isFile())result.push({path:relative(this.root,file),hash:hash(readFileSync(file))});}};walk(this.root);return result;}
+ folder(kind:'Bills'|'Exports'|'Diagnostics'){if(!this.active)throw Error('Demo session is not active.');return `${kind}/Demo/${this.manifest!.id}`;}
+ planFile(relativeName:string,digest:string){if(!this.active)return;const file=this.safe(relativeName),rel=relative(this.root,file);if(!['Bills','Exports','Diagnostics'].some(k=>rel.startsWith(join(k,'Demo',this.manifest!.id)+sep)))throw Error('Demo files must stay in their session folder.');this.manifest!.demoFiles=this.manifest!.demoFiles.filter(e=>e.path!==rel);this.manifest!.demoFiles.push({path:rel,hash:digest});this.persist();}
+ private safe(relativeName:string){if(isAbsolute(relativeName))throw Error('Unsafe demo file.');const file=resolve(this.root,relativeName),rel=relative(this.root,file);if(rel.startsWith('..')||isAbsolute(rel))throw Error('Unsafe demo file.');for(let p=file;p!==this.root;p=dirname(p)){if(existsSync(p)&&lstatSync(p).isSymbolicLink())throw Error('Unsafe demo symbolic link.');}return file;}
+ recordFile(file:string){if(!this.active)return;const rel=relative(this.root,resolve(file));const allowed=['Bills','Exports','Diagnostics'].some(k=>rel.startsWith(join(k,'Demo',this.manifest!.id)+sep));if(!allowed)throw Error('Demo files must stay in their session folder.');const safe=this.safe(rel);const entry={path:rel,hash:hash(readFileSync(safe))};this.manifest!.demoFiles=this.manifest!.demoFiles.filter(e=>e.path!==rel);this.manifest!.demoFiles.push(entry);this.persist();}
+ isExisting(table:string,id:unknown){return !!this.manifest?.baseline[table]?.includes(String(id));}
+ assertDemo(table:string,id:unknown){if(this.isExisting(table,id))throw Error('This record predates the demo session and is temporarily read-only.');}
+ guard(command:string,payload:unknown){if(!this.active)return;const p=(payload||{}) as Record<string,any>;const blocked=()=>{throw Error('This action is paused during the demo session. Remove demo data to resume normal work.');};
+  if(['layoutPreview','status','login','logout','state','register','document','calculateDraft','view','diagnostics','closeReady'].includes(command))return;
+  if(command==='google')return blocked();
+  if(command==='files'){if(['complianceStatus','portalExport','previewComplianceImport','confirmComplianceImport','cancelComplianceImport','openComplianceImportPdf','compliancePdf','saveComplianceReference','openOriginalInvoicePdf'].includes(p.action)){if(p.action==='confirmComplianceImport'||p.action==='cancelComplianceImport'||p.action==='openComplianceImportPdf')return;this.assertDemo('documents',p.input?.id);return;}if(['demoStatus','loadDemoData','removeDemoData','pdfExportPreferences','openInvoicePdf','revealInvoice','openPdfFolder'].includes(String(p.action)))return;return blocked();}
+  if(command==='saveProfile'){if(p.profile?.demoSessionId!==this.manifest!.id||p.profile?.series!=='DM'||!['v4-7','v4-8','v4-9','v4-10','v4-11','v4-12'].includes(p.profile?.templateVersion))throw Error('Keep the DEMO identity and DM number series during this session.');return;}
+  if(command==='saveCustomer'){this.assertDemo('customers',p.customer?.id);return;}
+  if(command==='saveProduct'){this.assertDemo('products',p.product?.id);return;}
+  if(command==='saveDraft'){this.assertDemo('drafts',p.draft?.id);this.assertDemo('documents',p.draft?.id);if(p.draft?.originalId)this.assertDemo('documents',p.draft.originalId);if(p.draft?.linkedChallanId)this.assertDemo('documents',p.draft.linkedChallanId);for(const allocation of p.draft?.advanceAllocations||[])this.assertDemo('payments',allocation.paymentId);if(p.draft?.customerId)this.assertDemo('customers',p.draft.customerId);for(const l of p.draft?.lines||[])if(l.productId)this.assertDemo('products',l.productId);return;}
+  if(command==='issue'){this.assertDemo('drafts',p.draftId);this.assertDemo('documents',p.draftId);return;}
+  if(command==='pdf'||command==='print'){this.assertDemo('drafts',p.id);this.assertDemo('documents',p.id);return;}
+  if(command==='recordPayment'){this.assertDemo('payments',p.payment?.id);this.assertDemo('customers',p.payment?.partyId);for(const a of p.payment?.allocations||[])this.assertDemo('documents',a.documentId);return;}
+  if(command==='purchase'){this.assertDemo('purchase_documents',p.purchase?.id);this.assertDemo('customers',p.purchase?.supplierId);for(const l of p.purchase?.lines||[])this.assertDemo('products',l.productId);return;}
+  if(command==='cancel'){this.assertDemo('documents',p.id);return;}
+  if(command==='reversePayment'){this.assertDemo('payments',p.paymentId);return;}
+  if(command==='operations'){if(p.action==='globalSearch'||p.action==='reviewDraft')return;if(p.action==='copyDraft'){this.assertDemo('drafts',p.input?.id);return;}if(p.action==='rememberCustomer'){this.assertDemo('customers',p.input?.draft?.customerId);return;}if(p.action==='saveSettingsBundle'){if(p.input?.profile)this.guard('saveProfile',{profile:p.input.profile});for(const entry of p.input?.settings||[])this.guard('operations',{action:'saveSetting',input:entry});return;}if(['saveSetting','savePrintPreset','savePaymentSettings'].includes(p.action)){if(p.action==='savePaymentSettings')this.guard('saveProfile',{profile:p.input?.profile});if(p.action==='saveSetting'&&!['invoice','appearance','payments','gst','compliance','stock','approvals','printPresets'].includes(p.input?.key))return blocked();return;}if(['duplicate','correction'].includes(p.action)){this.assertDemo('documents',p.input?.id);return;}return blocked();}
+  return blocked();
+ }
+ async begin(s:Store,token:string){const actor=s.actor(token,'settings');if(actor.role!=='Owner')throw Error('Owner permission required.');if(s.profile().mode!=='TEST')throw Error('Demo sessions are TEST-only.');if(this.manifest)throw Error('A demo session already exists. Remove it before loading another.');
+  const id=randomUUID(),dir=join(this.directory,id);mkdirSync(dir,{recursive:true,mode:0o700});const checkpoint=join(dir,'checkpoint.sqlite');await backup(s.db,checkpoint);const probe=new DatabaseSync(checkpoint);try{probe.exec('PRAGMA wal_checkpoint(TRUNCATE);PRAGMA journal_mode=DELETE;');if(probe.prepare('PRAGMA integrity_check').get()!.integrity_check!=='ok')throw Error('Demo checkpoint integrity failed.');}finally{probe.close();}
+  const baseline:Record<string,string[]>={};for(const table of BASE_TABLES)baseline[table]=s.db.prepare(`SELECT id FROM ${table}`).all().map(r=>String(r.id));
+  this.manifest={version:1,id,root:this.root,state:'preparing',checkpointHash:hash(readFileSync(checkpoint)),baseline,files:this.scan(),demoFiles:[],createdAt:new Date().toISOString()};this.persist();writeFileSync(this.pointer,JSON.stringify({id}),{mode:0o600});
+  try{s.tx(()=>this.seed(s,token));this.manifest.state='active';this.persist();return this.status();}catch(e){throw Error('Demo loading did not finish. Restart the app to restore its verified checkpoint. '+(e as Error).message);}
+ }
+ private seed(s:Store,token:string){const id=this.manifest!.id.slice(0,8),prefix='demo-'+id+'-',p=s.profile();
+  s.saveProfile(token,{...p,name:p.name||'Example Business',brandName:p.brandName||'Example Brand',address:p.address||'Floor 2, Plot A-3, Extended Lal Dora',city:p.city||'New Delhi',pincode:p.pincode||'110041',logoData:p.logoData||EXAMPLE_BRAND_LOGO,series:'DM',templateVersion:'v4-12',demoSessionId:this.manifest!.id,registered:true,composition:false,bank:'',bankName:'Demonstration Bank',accountNumber:'000000012345',ifsc:'DEMO0000001',upi:'demo.ExampleBrand@example',paymentTerms:p.paymentTerms||'Net 15 Days',refreshExcel:false});
+  // The checkpoint restores these TEST configuration rows exactly after the session.
+  s.db.prepare("DELETE FROM app_settings WHERE key IN('compliance','migrationCutover')").run();s.db.prepare('DELETE FROM period_locks').run();
+  const customers:Customer[]=[];const places=[['Delhi','07','110041'],['Mumbai','27','400001'],['Bengaluru','29','560001'],['Jaipur','08','302001'],['Lucknow','09','226001'],['Chandigarh','04','160017']] as const;
+  for(let i=0;i<6;i++){const [city,state,pincode]=places[i]!;customers.push(s.saveCustomer(token,{id:prefix+'customer-'+i,revision:0,kind:'customer',name:['DEMO · Delhi Fresh Mart','DEMO · Coastal Foods','DEMO · Garden City Retail','DEMO · Pink City Stores','DEMO · Awadh Distributors','DEMO · North Star Traders'][i]!,address:`Shop ${12+i}, Ground Floor, Example Market Road\n${city} Business Centre`,shippingAddress:`Warehouse ${21+i}, Example Industrial Estate\nGate 2, Dispatch Office, ${city} ${pincode}`,city,pincode,state,gstin:'',termsDays:[15,30,7,15,21,10][i]!,phone:'90000000'+String(i).padStart(2,'0'),email:`demo${i}@example.invalid`}));}
+  for(let i=0;i<2;i++)s.saveCustomer(token,{id:prefix+'supplier-'+i,revision:0,kind:'supplier',name:'DEMO · Example Ingredients '+(i+1),address:`Unit ${i+1}, Example Industrial Estate\nDelhi 110041`,state:'07',gstin:'',termsDays:30});
+  const names=['Green Chilli Pickle 500 g','Garlic Pickle 500 g','Mango Pickle 500 g','Mixed Pickle 1 kg','Lime Pickle 500 g','Chilli Sauce 250 ml','Tomato Sauce 500 ml','Sweet Mango Chutney','Ginger Pickle 500 g','Amla Pickle 500 g','Red Chilli Pickle 1 kg','Traditional Spice Mix','Coriander Powder 200 g','Turmeric Powder 200 g','Cumin Seeds 200 g'];
+  const products:Product[]=names.map((name,i)=>s.saveProduct(token,{id:prefix+'product-'+i,revision:0,sku:'DEMO-'+String(i+1).padStart(3,'0'),name,hsn:'20019000',unit:'NOS',rate:String(75+i*5),gst:i%4===0?'12':'18',category:'taxable',casePack:'24',tracked:false,batchTracked:false,reorder:'0'}));
+  const counts=[1,3,5,8,10,15,3,5,8,10,15,1,5,10,15];
+  for(let i=0;i<15;i++){const c=customers[i%6]!,date=new Date(businessDate()+'T12:00:00Z');date.setUTCDate(date.getUTCDate()-(14-i));const due=new Date(date);due.setUTCDate(due.getUTCDate()+c.termsDays);const d={...newDraft(prefix+'invoice-'+i),date:date.toISOString().slice(0,10),dueDate:due.toISOString().slice(0,10),customerId:c.id,customerName:c.name,address:[c.address,c.city,c.pincode].join(', '),shipTo:c.shippingAddress!,placeOfSupply:c.state,notes:s.profile().terms,lines:products.slice(0,counts[i]).map((product,j)=>({...newLine(prefix+'line-'+i+'-'+j),productId:product.id,description:product.name,hsn:product.hsn,unit:product.unit,rate:product.rate,gst:product.gst,quantity:String(6+(i+j)%6*6)}))};const saved=s.saveDraft(token,d);
+   if(i<12){const issued=s.issue(token,{draftId:saved.id,expectedVersion:saved.version,idempotencyKey:prefix+'issue-'+i});if(i%3!==2){const amount=i%3===0?issued.snapshot.totals.total:Math.floor(issued.snapshot.totals.total/2);s.recordPayment(token,{id:prefix+'payment-'+i,partyId:c.id,date:d.date,amount,mode:i%2?'bank':'UPI',reference:'DEMO receipt '+(i+1),allocations:[{documentId:issued.id,amount}]});}}
+  }
+  s.verifyInternal();
+ }
+ markRestoring(){if(!this.manifest)throw Error('No demo session exists.');this.manifest.state='restoring';this.persist();}
+ restore(){if(!this.manifest)return;const m=this.manifest,checkpoint=join(this.sessionDirectory,'checkpoint.sqlite');if(hash(readFileSync(checkpoint))!==m.checkpointHash)throw Error('Demo checkpoint checksum mismatch; workspace was not replaced.');
+  for(const entry of m.files){const file=this.safe(entry.path);if(!existsSync(file)||hash(readFileSync(file))!==entry.hash)throw Error('A pre-demo file changed outside the app. Restore is paused: '+entry.path);}
+  const probe=new DatabaseSync(checkpoint,{readOnly:true});try{if(probe.prepare('PRAGMA integrity_check').get()!.integrity_check!=='ok'||probe.prepare('PRAGMA foreign_key_check').all().length)throw Error('Demo checkpoint failed verification.');}finally{probe.close();}
+  for(const entry of m.demoFiles){const file=this.safe(entry.path);if(existsSync(file)&&hash(readFileSync(file))!==entry.hash)throw Error('A demo file was changed outside the app. Cleanup is paused: '+entry.path);}
+  this.markRestoring();const target=join(this.root,'Data','invoice-studio.sqlite'),stage=target+'.restore-'+randomUUID();copyFileSync(checkpoint,stage);if(hash(readFileSync(stage))!==m.checkpointHash)throw Error('Restored database checksum mismatch.');
+  // Caller must close SQLite before this exact, workspace-scoped replacement.
+  for(const suffix of ['-wal','-shm','-journal'])if(existsSync(target+suffix))rmSync(target+suffix);
+  if(existsSync(target)){const name='retired-'+randomUUID()+'.sqlite';m.retired=[...(m.retired||[]),{path:name,hash:hash(readFileSync(target))}];this.persist();renameSync(target,join(this.sessionDirectory,name));}renameSync(stage,target);
+  for(const entry of m.demoFiles){const file=this.safe(entry.path);const allowed=['Bills','Exports','Diagnostics'].some(k=>entry.path.startsWith(join(k,'Demo',m.id)+sep));if(!allowed)throw Error('Unsafe demo cleanup manifest.');if(existsSync(file)&&hash(readFileSync(file))===entry.hash)rmSync(file);}
+  const restored=new Store(this.root,{mustExist:true});try{restored.verifyInternal();}finally{restored.close();}for(const old of m.retired||[]){if(!/^retired-[a-f0-9-]{36}\.sqlite$/.test(old.path))throw Error('Unsafe retired database path.');const file=join(this.sessionDirectory,old.path);if(existsSync(file)){if(hash(readFileSync(file))!==old.hash)throw Error('A retired demo database changed externally; it was preserved.');rmSync(file);}}m.retired=[];m.state='completed';this.persist();rmSync(this.pointer);this.manifest=null;
+ }
+ recoverIfNeeded(){if(this.manifest&&!this.active)this.restore();}
+}
+
+
+

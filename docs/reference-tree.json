@@ -1,0 +1,508 @@
+{
+  "sha": "9d3537a8188ad03c7186ab721596d5a3a0e394ab",
+  "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/9d3537a8188ad03c7186ab721596d5a3a0e394ab",
+  "tree": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4dce5ee60e546ed489086cf21d9efe96272f0341",
+      "size": 501,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/4dce5ee60e546ed489086cf21d9efe96272f0341"
+    },
+    {
+      "path": "AUDIT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c61a50dd5a8bd31eaf596a1efbb3d13ec4af024c",
+      "size": 2855,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/c61a50dd5a8bd31eaf596a1efbb3d13ec4af024c"
+    },
+    {
+      "path": "CHANGES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "96937c1de66865f924de9f15d4d39709184d6b4e",
+      "size": 2363,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/96937c1de66865f924de9f15d4d39709184d6b4e"
+    },
+    {
+      "path": "INVOICE_STUDIO_IMPLEMENTATION_PLAN.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "94497251ea4981464b3b9c178de96c6efa405a1c",
+      "size": 24064,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/94497251ea4981464b3b9c178de96c6efa405a1c"
+    },
+    {
+      "path": "LICENSES",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "dcc4bd2b9c7045cb91e2bf34f7e2fab89858dea3",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/dcc4bd2b9c7045cb91e2bf34f7e2fab89858dea3"
+    },
+    {
+      "path": "LICENSES/Decimal.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "57740b9d4d86aedf5d518f2f363d5cf192c54127",
+      "size": 1104,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/57740b9d4d86aedf5d518f2f363d5cf192c54127"
+    },
+    {
+      "path": "LICENSES/JetBrains-Mono.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8f7ed671137e7a27c646ead86f45d5cb4875f459",
+      "size": 4524,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/8f7ed671137e7a27c646ead86f45d5cb4875f459"
+    },
+    {
+      "path": "LICENSES/Lucide.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "88290654d9be43fe537c5025e3006ea4b6edc94e",
+      "size": 958,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/88290654d9be43fe537c5025e3006ea4b6edc94e"
+    },
+    {
+      "path": "LICENSES/Plus-Jakarta-Sans.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d82b0820892c94be963fd958ef1817245c52a472",
+      "size": 4534,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/d82b0820892c94be963fd958ef1817245c52a472"
+    },
+    {
+      "path": "LICENSES/QR-Code-Generator.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4669e77e856e69615db041c078090a9f69a4341",
+      "size": 1158,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/f4669e77e856e69615db041c078090a9f69a4341"
+    },
+    {
+      "path": "LICENSES/THIRD-PARTY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30a76d5eea77d00b7bc5794f5a2443e5524a30a2",
+      "size": 1047,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/30a76d5eea77d00b7bc5794f5a2443e5524a30a2"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b868e58d45bdc37179d9fa0292059dc84d3b094",
+      "size": 13383,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/7b868e58d45bdc37179d9fa0292059dc84d3b094"
+    },
+    {
+      "path": "RELEASE_NOTES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "70aee4fa6e319670bb4804f5a9869c9a586d8552",
+      "size": 1192,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/70aee4fa6e319670bb4804f5a9869c9a586d8552"
+    },
+    {
+      "path": "TEST_REPORT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9dceead004d105bb6f274d8f7ceea46ad29d47cf",
+      "size": 12005,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/9dceead004d105bb6f274d8f7ceea46ad29d47cf"
+    },
+    {
+      "path": "assets",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "aba2ffdc02bf357a25af94550ff6ee3d06f7ea1d",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/aba2ffdc02bf357a25af94550ff6ee3d06f7ea1d"
+    },
+    {
+      "path": "assets/fonts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ad2c26a6a0803ad68e0e0dd35d9cc04c7240a3b6",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/ad2c26a6a0803ad68e0e0dd35d9cc04c7240a3b6"
+    },
+    {
+      "path": "assets/fonts/jakarta-latin.woff2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a180dc40f205fc48979a75ccbe8a10221a71a4ba",
+      "size": 27348,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/a180dc40f205fc48979a75ccbe8a10221a71a4ba"
+    },
+    {
+      "path": "assets/fonts/mono-latin.woff2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd5102a44c763f1cfe9f2b199fd5d7257491c0dd",
+      "size": 40404,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/cd5102a44c763f1cfe9f2b199fd5d7257491c0dd"
+    },
+    {
+      "path": "assets/icon.ico",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "308eae034ed868ebb943a7899869ab9036d2018c",
+      "size": 10501,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/308eae034ed868ebb943a7899869ab9036d2018c"
+    },
+    {
+      "path": "assets/icon.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b78f70d8d23c7e7ba42c642dbffc8528ef88c0d2",
+      "size": 263,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/b78f70d8d23c7e7ba42c642dbffc8528ef88c0d2"
+    },
+    {
+      "path": "assets/magic-roots-logo.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "914878172f150ac2cd4c4b8c0d1ec38b22b314a9",
+      "size": 1498972,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/914878172f150ac2cd4c4b8c0d1ec38b22b314a9"
+    },
+    {
+      "path": "css",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e3313c451842bc666c5647ff44bf306f38add5a7",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/e3313c451842bc666c5647ff44bf306f38add5a7"
+    },
+    {
+      "path": "css/invoice.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b8add623cd5670d12ddbd473b831f672c05b2334",
+      "size": 6412,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/b8add623cd5670d12ddbd473b831f672c05b2334"
+    },
+    {
+      "path": "css/styles.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c9b5c9fb7a99a8a6e00f13da5fa261338cdc57dd",
+      "size": 15578,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/c9b5c9fb7a99a8a6e00f13da5fa261338cdc57dd"
+    },
+    {
+      "path": "css/tailwind-input.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5c61c956711f981a41e95f7fcf0038436cfbb22",
+      "size": 59,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/b5c61c956711f981a41e95f7fcf0038436cfbb22"
+    },
+    {
+      "path": "css/tailwind.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c286c530f90b3ba51ea75924dcae1280b3e1541",
+      "size": 5438,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/0c286c530f90b3ba51ea75924dcae1280b3e1541"
+    },
+    {
+      "path": "desktop",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2781e4530664b927219c957c51b9f9ea0ee21d99",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/2781e4530664b927219c957c51b9f9ea0ee21d99"
+    },
+    {
+      "path": "desktop/legacy.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4061f5715d45d32fe5a7687bdb16754e7f5bae60",
+      "size": 5945,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/4061f5715d45d32fe5a7687bdb16754e7f5bae60"
+    },
+    {
+      "path": "desktop/main.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1dafb0e315254cfa3768752256fb5dfd2827ff42",
+      "size": 19759,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/1dafb0e315254cfa3768752256fb5dfd2827ff42"
+    },
+    {
+      "path": "desktop/preload.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c5f82b9ba96011938660ace685c360f501fd9579",
+      "size": 2015,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/c5f82b9ba96011938660ace685c360f501fd9579"
+    },
+    {
+      "path": "desktop/store.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3038de5b4664ff9efbdc69aefb3e08eaea231854",
+      "size": 41981,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/3038de5b4664ff9efbdc69aefb3e08eaea231854"
+    },
+    {
+      "path": "desktop/workbooks.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fc6a7e26c0525f33965358a06dd222c605ded36b",
+      "size": 19358,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/fc6a7e26c0525f33965358a06dd222c605ded36b"
+    },
+    {
+      "path": "index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e40cd2cff93032dd024298a7a47cdd2284849795",
+      "size": 5046,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/e40cd2cff93032dd024298a7a47cdd2284849795"
+    },
+    {
+      "path": "js",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "67979cd6f0fc37ff739937648600398cec6c7255",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/67979cd6f0fc37ff739937648600398cec6c7255"
+    },
+    {
+      "path": "js/studio.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afdc10a02d04d382fbe5cb97b234a666b8fcad90",
+      "size": 76013,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/afdc10a02d04d382fbe5cb97b234a666b8fcad90"
+    },
+    {
+      "path": "lib",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ff167ee8db639a213a0ec6b274d058c5131e71ab",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/ff167ee8db639a213a0ec6b274d058c5131e71ab"
+    },
+    {
+      "path": "lib/decimal.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23295c6acc56fc0a311848fea9270d2317c59249",
+      "size": 136673,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/23295c6acc56fc0a311848fea9270d2317c59249"
+    },
+    {
+      "path": "lib/lucide.min.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93c7e308c058d2758cfb2c7b67898e2ea447d161",
+      "size": 357796,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/93c7e308c058d2758cfb2c7b67898e2ea447d161"
+    },
+    {
+      "path": "lib/qrcode.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76889b589ec831dd9b791601f6592793356ce9cd",
+      "size": 56694,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/76889b589ec831dd9b791601f6592793356ce9cd"
+    },
+    {
+      "path": "package-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d876fc1d7700b985f0a615f7e5242f6ecb8186ad",
+      "size": 232516,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/d876fc1d7700b985f0a615f7e5242f6ecb8186ad"
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16f93cee2d56fd5234397e9804a1c5f7453b4cf2",
+      "size": 2227,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/16f93cee2d56fd5234397e9804a1c5f7453b4cf2"
+    },
+    {
+      "path": "scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5b8533d44d5347de8b9425153a633f64fe76578d",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/5b8533d44d5347de8b9425153a633f64fe76578d"
+    },
+    {
+      "path": "scripts/desktop-smoke.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a0d4b2ff73553a1e896c74946f43d378bf89e43",
+      "size": 7647,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/0a0d4b2ff73553a1e896c74946f43d378bf89e43"
+    },
+    {
+      "path": "scripts/installer-smoke.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97e4a56cd2206961fc6e1e18247cf2708a94b3b4",
+      "size": 4988,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/97e4a56cd2206961fc6e1e18247cf2708a94b3b4"
+    },
+    {
+      "path": "scripts/make-icon.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "032662529dbff0c3e8d3b4d147ea3e46076fdc61",
+      "size": 498,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/032662529dbff0c3e8d3b4d147ea3e46076fdc61"
+    },
+    {
+      "path": "scripts/packaged-smoke.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d8d63dc24fd6f6ccf14b1617b246ebf18544f02f",
+      "size": 2461,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/d8d63dc24fd6f6ccf14b1617b246ebf18544f02f"
+    },
+    {
+      "path": "scripts/portable-mode.example.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c8d6b0156f20bdb954da8489231dc25894fd557",
+      "size": 47,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/7c8d6b0156f20bdb954da8489231dc25894fd557"
+    },
+    {
+      "path": "scripts/portable-smoke.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "01c6900ae699143d2a246439e719e64487a46be4",
+      "size": 3280,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/01c6900ae699143d2a246439e719e64487a46be4"
+    },
+    {
+      "path": "scripts/shortcut-smoke.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a98a63407806990d38761706e24292737c2bdbc",
+      "size": 1928,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/3a98a63407806990d38761706e24292737c2bdbc"
+    },
+    {
+      "path": "scripts/verify-pdfs.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "77a68c8c80af17766eb86757321af951b8302077",
+      "size": 2174,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/77a68c8c80af17766eb86757321af951b8302077"
+    },
+    {
+      "path": "server.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f407ace8c7d06800a5374747848b63916980a38",
+      "size": 1778,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/1f407ace8c7d06800a5374747848b63916980a38"
+    },
+    {
+      "path": "shared",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "38ae5d0c4ec5d8d2b5a4d649ac334a31ffd90576",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/38ae5d0c4ec5d8d2b5a4d649ac334a31ffd90576"
+    },
+    {
+      "path": "shared/core.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d35c8716b086536056488f01b9f23c310419828",
+      "size": 23994,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/9d35c8716b086536056488f01b9f23c310419828"
+    },
+    {
+      "path": "shared/invoice-view.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c8b06f081b784874e36e720d91ce3a6afa181e4e",
+      "size": 10697,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/c8b06f081b784874e36e720d91ce3a6afa181e4e"
+    },
+    {
+      "path": "start.bat",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64a7f9a2e1c6f14383b274523ff811e8520398e4",
+      "size": 538,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/64a7f9a2e1c6f14383b274523ff811e8520398e4"
+    },
+    {
+      "path": "tailwind.config.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d465cc256c9c31e93c1e2691a4cb981cbae4ace5",
+      "size": 269,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/d465cc256c9c31e93c1e2691a4cb981cbae4ace5"
+    },
+    {
+      "path": "templates",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "987e785003ad53f1c1226726f974c0f247da4908",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/987e785003ad53f1c1226726f974c0f247da4908"
+    },
+    {
+      "path": "templates/InvoiceStudio-Template.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15437dce23f1ac2819ac5081f5ee74d61a089cd3",
+      "size": 13476,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/15437dce23f1ac2819ac5081f5ee74d61a089cd3"
+    },
+    {
+      "path": "tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f911fa940fe73dc926185b9f3c36e5ce0eae6179",
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/trees/f911fa940fe73dc926185b9f3c36e5ce0eae6179"
+    },
+    {
+      "path": "tests/core.test.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "22edf7bd2fd2a0fb8cb9cb4fedbebf1bdb39e905",
+      "size": 4411,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/22edf7bd2fd2a0fb8cb9cb4fedbebf1bdb39e905"
+    },
+    {
+      "path": "tests/helpers.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "040595240dc7499ab585d358100473944d6619b2",
+      "size": 873,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/040595240dc7499ab585d358100473944d6619b2"
+    },
+    {
+      "path": "tests/recovery.test.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76046f0d3d31577314d0b03ac20f0727830e3fc4",
+      "size": 4066,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/76046f0d3d31577314d0b03ac20f0727830e3fc4"
+    },
+    {
+      "path": "tests/store.test.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ddc0de19f48eca9ee706ab037170b2ee3cf9c4c7",
+      "size": 5752,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/ddc0de19f48eca9ee706ab037170b2ee3cf9c4c7"
+    },
+    {
+      "path": "tests/workbooks.test.cjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4063bc452cfb60754a0d68906e87700ade4a67d1",
+      "size": 5227,
+      "url": "https://api.github.com/repos/aimummatv/Invoice-Studio/git/blobs/4063bc452cfb60754a0d68906e87700ade4a67d1"
+    }
+  ],
+  "truncated": false
+}

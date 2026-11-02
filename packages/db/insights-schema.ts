@@ -1,0 +1,2 @@
+export const INSIGHTS_SCHEMA=`CREATE TABLE IF NOT EXISTS scanned_bills(id TEXT PRIMARY KEY,at TEXT NOT NULL,actor_id TEXT NOT NULL,file_name TEXT NOT NULL,file_hash TEXT NOT NULL,supplier_id TEXT,bill_number TEXT NOT NULL,bill_date TEXT NOT NULL,total TEXT NOT NULL,ocr_text TEXT NOT NULL,parsed TEXT NOT NULL,UNIQUE(file_hash));
+CREATE INDEX IF NOT EXISTS scanned_bills_at ON scanned_bills(at DESC);`;
