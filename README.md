@@ -2,6 +2,12 @@
 
 **Current implemented application: v4-12.2.** Offline Windows invoicing built with Electron, TypeScript, Preact and SQLite. The v4-13 guided government JSON workflow is approved but **paused and not implemented**.
 
+## Download the Windows application
+
+Download the [Windows portable EXE](https://github.com/aimummatv/invoice-studio-v4/releases/download/v4.12.2/Invoice-Studio-4.12.2-Windows-x64-Portable.exe) or the [complete Windows ZIP](https://github.com/aimummatv/invoice-studio-v4/releases/download/v4.12.2/Invoice-Studio-4.12.2-Windows-x64.zip) from the [v4.12.2 release](https://github.com/aimummatv/invoice-studio-v4/releases/tag/v4.12.2).
+
+The portable EXE includes its required companion files. For the ZIP, extract the entire folder before opening `Start Invoice Studio.bat` or `Invoice Studio 4.exe`. Node.js is not needed to run the packaged app. These downloads contain program files only; they do not include the existing local business records or demo checkpoint. On a new/default profile, create a TEST Owner. Continue using an existing custom Desktop launcher to retain its configured profile/data paths. See [Windows download notes](docs/WINDOWS_DOWNLOAD.md).
+
 ## Run from source
 
 Use Windows x64 and Node.js 24 LTS or newer supported Node 24 release.

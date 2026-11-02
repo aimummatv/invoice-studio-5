@@ -1,6 +1,6 @@
 import {_electron} from 'playwright-core';
-import {mkdtempSync,existsSync,readFileSync,writeFileSync} from 'node:fs';
-import {resolve,join} from 'node:path';
+import {mkdtempSync,mkdirSync,existsSync,readFileSync,writeFileSync} from 'node:fs';
+import {resolve,join,dirname} from 'node:path';
 import assert from 'node:assert/strict';
 import {newDraft,newLine} from '../packages/core/model.ts';
 const executablePath=process.env.STUDIO4_PACKAGED_EXE;if(!executablePath||!existsSync(executablePath))throw Error('Set STUDIO4_PACKAGED_EXE to the packaged Windows executable.');
@@ -14,7 +14,7 @@ try{
  const customer=await invoke('saveCustomer',{customer:{id:'package-buyer',revision:0,name:'Synthetic Buyer',address:'2 Example Road',state:'27',gstin:'',kind:'customer',termsDays:15}});
  const draft=await invoke('saveDraft',{draft:{...newDraft(),customerId:customer.id,customerName:customer.name,address:customer.address,placeOfSupply:'27',lines:[{...newLine(),description:'Package smoke test',hsn:'20019000',rate:'100',gst:'18'}]}});
  const result=await invoke('issue',{draftId:draft.id,expectedVersion:draft.version,idempotencyKey:'packaged-issue'});const pdf=await invoke('pdf',{id:result.id});assert.equal(readFileSync(pdf.path).subarray(0,5).toString(),'%PDF-');const compliance=await invoke('files',{action:'complianceStatus',input:{id:result.id}});assert.equal(compliance.evidence.length,0);assert.deepEqual(errors,[]);
- writeFileSync(resolve('../../desktop-release-v12/package-test.json'),JSON.stringify({passed:true,executablePath,root,pdfCreated:true,template:'v4-12',errors},null,2));console.log('PASS: standalone packaged executable, local backend, v4-12 template, issue, PDF export and compliance status.');
+ const resultPath=resolve(process.env.STUDIO4_PACKAGE_RESULT||'qa/evidence/package-test.json');mkdirSync(dirname(resultPath),{recursive:true});writeFileSync(resultPath,JSON.stringify({passed:true,executablePath,root,pdfCreated:true,template:'v4-12',errors},null,2));console.log('PASS: standalone packaged executable, local backend, v4-12 template, issue, PDF export and compliance status.');
 }finally{if(app)await app.close().catch(()=>{});}
 
 
