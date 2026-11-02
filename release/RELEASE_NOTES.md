@@ -1,4 +1,10 @@
-# Invoice Studio v4-12.2 — GST QR field check
+# Invoice Studio v4-12.3 — startup pipe hotfix
+
+2 November 2026. Prevents a JavaScript main-process error when a desktop launcher closes an inherited output pipe while Node/Electron prints a warning. Handles asynchronous stdout/stderr `EPIPE` and synchronous console `EPIPE`; unrelated errors still propagate.
+
+Validation: TypeScript, production build, 123 service tests, and an isolated packaged startup/disconnected-pipe check passed. A separate local Windows package was produced; no new GitHub binary release has been published. Existing data, issued documents and demo checkpoints are unchanged by this code change.
+
+## Invoice Studio v4-12.2 — GST QR field check
 
 02 November 2026. Added a clearly labelled sample IRN generation date/time and taxable/GST values to demo QR summaries. Main HSN now follows the highest-taxable-value line. New official imports retain pending status for missing/invalid registration dates and reject inconsistent main HSNs; signed portal QR payloads are preserved. Printed party/place-of-supply fields show state names with codes. Demo samples remain unregistered and all original issued records/PDFs are preserved.
 

@@ -2,6 +2,8 @@
 
 This repository is the home of Invoice Studio 5 development, continuing the Invoice Studio 4 history. The included application remains v4-12.2 until Version 5 changes are implemented and rebuilt.
 
+**Startup hotfix, 2 November 2026:** a corrected v4-12.3 package has been built and checked locally. It handles closed launcher output pipes (`EPIPE`) without masking other errors. The downloads below remain the published v4-12.2 baseline until a new release is uploaded. See [current verification](docs/CURRENT_RELEASE.md).
+
 Keep completed, verified source and documentation changes pushed to [aimummatv/invoice-studio-5](https://github.com/aimummatv/invoice-studio-5). Exclude local business data, profiles, credentials and demo checkpoints.
 
 **Current implemented application: v4-12.2.** Offline Windows invoicing built with Electron, TypeScript, Preact and SQLite. The v4-13 guided government JSON workflow is approved but **paused and not implemented**.

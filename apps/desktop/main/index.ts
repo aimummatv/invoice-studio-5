@@ -1,3 +1,4 @@
+import './diagnostic-output.ts';
 import {health} from '../../../packages/core/validation.ts';
 import {DemoExamples} from '../../../packages/db/demo-examples.ts';
 import {DraftRecovery} from './recovery-drafts.ts';

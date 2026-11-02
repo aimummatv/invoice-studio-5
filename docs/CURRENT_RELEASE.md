@@ -1,4 +1,12 @@
-# Finalized release baseline: v4-12.2
+# Current local package: v4-12.3 startup hotfix
+
+2 November 2026. Handles `EPIPE` from inherited stdout/stderr pipes, including Electron's synchronous console writes. Other output errors still propagate. No data/schema or invoice workflow changes.
+
+Verified: TypeScript, production build, all 123 service tests (including three diagnostic-output regressions), and a packaged startup check with isolated data, disconnected output pipes, injected `EPIPE` stream errors and subsequent console/process warnings. The owner setup screen remained responsive. Run `node scripts/startup-pipe-check.mjs` with `STUDIO4_PACKAGED_EXE` pointing to the desired executable to repeat the packaged check.
+
+The corrected unsigned Windows package was built locally with electron-builder's version override `4.12.3`. GitHub downloads remain v4-12.2 until a new release is uploaded. Physical printing and real government portal acceptance remain unverified.
+
+## Finalized release baseline: v4-12.2
 
 Implemented and packaged before GitHub publication. Validation recorded in the local release checklist:
 
